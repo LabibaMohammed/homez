@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:homez/indexpage.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // إضافة SharedPreferences
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -12,7 +13,7 @@ class _SignupState extends State<Signup> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  void handleSignup() {
+  void handleSignup() async {
     final email = emailController.text.trim();
     final password = passwordController.text;
 
@@ -32,6 +33,11 @@ class _SignupState extends State<Signup> {
         SnackBar(content: Text('Password must contain letters and numbers')),
       );
     } else {
+      // حفظ الإيميل فقط
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', true);
+      await prefs.setString('email', email);
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => Indexpage()),

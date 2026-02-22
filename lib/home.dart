@@ -220,7 +220,7 @@ class Home extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '$service',
+                  service,
                   style: TextStyle(
                     color: const Color(0xFF093A61),
                     fontSize: 18,

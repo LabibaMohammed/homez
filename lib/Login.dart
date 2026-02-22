@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:homez/indexpage.dart';
 import 'package:homez/sign_up.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -13,7 +14,23 @@ class _LoginState extends State<Login> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  void handleLogin() {
+  @override
+  void initState() {
+    super.initState();
+    loadSavedEmail(); // تحميل الإيميل المحفوظ
+  }
+
+  // تحميل البيانات المحفوظة
+  Future<void> loadSavedEmail() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? savedEmail = prefs.getString('email');
+
+    if (savedEmail != null) {
+      emailController.text = savedEmail;
+    }
+  }
+
+  void handleLogin() async {
     final email = emailController.text.trim();
     final password = passwordController.text;
 
@@ -33,6 +50,11 @@ class _LoginState extends State<Login> {
         SnackBar(content: Text('Password must contain letters and numbers')),
       );
     } else {
+      // ✅ حفظ البيانات في SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', true);
+      await prefs.setString('email', email);
+
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => Indexpage()),
@@ -48,94 +70,81 @@ class _LoginState extends State<Login> {
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(50.0),
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(
-                'Welcome',
-                style: TextStyle(
-                  fontSize: 45,
-                  fontWeight: FontWeight.w700,
-                  color: const Color(0xFF093A61),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Welcome',
+                  style: TextStyle(
+                    fontSize: 45,
+                    fontWeight: FontWeight.w700,
+                    color: const Color(0xFF093A61),
+                  ),
                 ),
-              ),
-              SizedBox(height: 60),
-              TextSelectionTheme(
-                data: TextSelectionThemeData(
-                  cursorColor: const Color(0xFF093A61),
-                  selectionHandleColor: const Color(0xFF093A61),
-                ),
-                child: TextField(
+                SizedBox(height: 60),
+                TextField(
                   controller: emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
-                    hintText: 'Email',
-                    hintStyle: TextStyle(color: Colors.grey),
-                    enabledBorder: InputBorder.none,
-                    focusedBorder: InputBorder.none,
+                    hintText: "Email",
                     fillColor: Colors.white,
                     filled: true,
+                    border: InputBorder.none,
                   ),
                 ),
-              ),
-              SizedBox(height: 10),
-              TextSelectionTheme(
-                data: TextSelectionThemeData(
-                  cursorColor: const Color(0xFF093A61),
-                  selectionHandleColor: const Color(0xFF093A61),
-                ),
-                child: TextField(
+                SizedBox(height: 10),
+                TextField(
                   controller: passwordController,
                   obscureText: true,
                   decoration: InputDecoration(
-                    hintText: 'Password',
-                    hintStyle: TextStyle(color: Colors.grey),
-                    enabledBorder: InputBorder.none,
-                    focusedBorder: InputBorder.none,
+                    hintText: "Password",
                     fillColor: Colors.white,
                     filled: true,
+                    border: InputBorder.none,
                   ),
                 ),
-              ),
-              
-              Padding(
-                padding: const EdgeInsets.only(right: 130),
-                child: ElevatedButton(
+                Padding(
+                  padding: const EdgeInsets.only(right: 130),
+                  child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        foregroundColor: const Color(0x00757171),
-                        shadowColor: Colors.transparent,
-                        elevation: 0,
-                        padding: EdgeInsets.all(0)),
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      elevation: 0,
+                      padding: EdgeInsets.zero,
+                    ),
                     onPressed: () {
                       Navigator.push(
-                        context,MaterialPageRoute(builder: (context) => Signup()),
+                        context,
+                        MaterialPageRoute(builder: (context) => Signup()),
                       );
                     },
                     child: Text(
                       'New here? create an account',
                       style: TextStyle(
-                          color: const Color(0xDEF44336), fontSize: 12),
-                    )),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFFB545),
-                  padding: EdgeInsets.symmetric(horizontal: 60),
-                ),
-                onPressed: handleLogin,
-                child: Text(
-                  'Login',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
+                        color: Color(0xDEF44336),
+                        fontSize: 12,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ]),
+                SizedBox(height: 5),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFFFB545),
+                    padding: EdgeInsets.symmetric(horizontal: 60),
+                  ),
+                  onPressed: handleLogin,
+                  child: Text(
+                    'Login',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "868265816686",
+    "project_id": "homez-3ff90",
+    "storage_bucket": "homez-3ff90.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:868265816686:android:8f7f3a11f4c4ebef0eac7f",
+        "android_client_info": {
+          "package_name": "com.example.homez"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoB10R2Rove4YvHBkCFXBYdKdgjz0indA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
