@@ -13,6 +13,8 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController firstNameController = TextEditingController();
+final TextEditingController lastNameController = TextEditingController();
 
   @override
   void initState() {
@@ -31,36 +33,48 @@ class _LoginState extends State<Login> {
   }
 
   void handleLogin() async {
-    final email = emailController.text.trim();
-    final password = passwordController.text;
+  final firstName = firstNameController.text.trim();
+  final lastName = lastNameController.text.trim();
+  final email = emailController.text.trim();
+  final password = passwordController.text;
 
-    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-    final passwordRegex = RegExp(r'^(?=.*[a-zA-Z])(?=.*\d).+$');
+  final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+  final passwordRegex = RegExp(r'^(?=.*[a-zA-Z])(?=.*\d).+$');
 
-    if (email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please enter both email and password')),
-      );
-    } else if (!emailRegex.hasMatch(email)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please enter a valid email address')),
-      );
-    } else if (!passwordRegex.hasMatch(password)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Password must contain letters and numbers')),
-      );
-    } else {
-      // ✅ حفظ البيانات في SharedPreferences
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('isLoggedIn', true);
-      await prefs.setString('email', email);
+  if (firstName.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Please enter your first name')),
+    );
+  } else if (email.isEmpty || password.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Please enter both email and password')),
+    );
+  } else if (!emailRegex.hasMatch(email)) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Please enter a valid email address')),
+    );
+  } else if (!passwordRegex.hasMatch(password)) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Password must contain letters and numbers')),
+    );
+  } else {
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Indexpage()),
-      );
-    }
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', true);
+    await prefs.setString('email', email);
+    await prefs.setString('firstName', firstName);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Indexpage(
+          firstName: firstName,
+          email: email,
+        ),
+      ),
+    );
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +95,33 @@ class _LoginState extends State<Login> {
                     color: const Color(0xFF093A61),
                   ),
                 ),
+
                 SizedBox(height: 60),
+                SizedBox(height: 30),
+
+TextField(
+  controller: firstNameController,
+  decoration: InputDecoration(
+    hintText: "First Name",
+    fillColor: Colors.white,
+    filled: true,
+    border: InputBorder.none,
+  ),
+),
+
+SizedBox(height: 10),
+
+TextField(
+  controller: lastNameController,
+  decoration: InputDecoration(
+    hintText: "Last Name (Optional)",
+    fillColor: Colors.white,
+    filled: true,
+    border: InputBorder.none,
+  ),
+),
+
+SizedBox(height: 10),
                 TextField(
                   controller: emailController,
                   keyboardType: TextInputType.emailAddress,

@@ -5,7 +5,11 @@ import 'package:homez/request.dart';
 import 'package:homez/search.dart';
 
 class Indexpage extends StatefulWidget {
-  const Indexpage({super.key});
+  final String firstName;
+  final String email;
+  
+
+  const Indexpage({super.key, required this.firstName, required this.email});
 
   @override
   State<Indexpage> createState() => _IndexpageState();
@@ -13,15 +17,18 @@ class Indexpage extends StatefulWidget {
 
 class _IndexpageState extends State<Indexpage> {
   int _bottomNavbar = 0;
-  final List<Widget> _pages = [
-    Home(),
-    Search(),
-    Request(),
-    Account(name: "name", email: " ", imageUrl: "imageUrl"),
-  ];
+  
+  
+  
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _pages = [
+    Home(firstName:widget.firstName, email: widget.email),
+    Search(),
+    Request(),
+    Account(name: widget.firstName, email: widget.email),
+  ];
     return Scaffold(
       body: IndexedStack(index: _bottomNavbar, children: _pages),
       bottomNavigationBar: BottomNavigationBar(

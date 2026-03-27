@@ -25,7 +25,10 @@ class _SearchState extends State<Search> {
         .toList();
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF2F8FD),
+      // backgroundColor:  Color(0xFFF2F8FD),
+      backgroundColor:  Theme.of(context).scaffoldBackgroundColor,
+
+      
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(50),

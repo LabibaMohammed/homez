@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class Home extends StatelessWidget {
-  const Home({super.key});
+  final String firstName;
+  final String email;
+
+  const Home({super.key, required this.firstName, required this.email});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +32,7 @@ class Home extends StatelessWidget {
                     children: [
                       Image.asset('images1/avatar1.png', height: 50, width: 50),
                       Text(
-                        'Hi Dawad',
+                        'Hi $firstName',
                         style: TextStyle(
                           color: const Color(0xFFFFB545),
                           fontSize: 15,

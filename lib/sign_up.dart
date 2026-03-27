@@ -10,10 +10,14 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
+  final TextEditingController firstNameController = TextEditingController();
+final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   void handleSignup() async {
+    final firstName = firstNameController.text.trim();
+  final lastName = lastNameController.text.trim();
     final email = emailController.text.trim();
     final password = passwordController.text;
 
@@ -40,7 +44,8 @@ class _SignupState extends State<Signup> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Indexpage()),
+        MaterialPageRoute(builder: (context) => Indexpage(firstName: firstName,
+          email: email,)),
       );
     }
   }
@@ -63,11 +68,38 @@ class _SignupState extends State<Signup> {
               ),
             ),
             SizedBox(height: 40),
+            SizedBox(height: 30),
+
+TextField(
+  controller: firstNameController,
+  decoration: InputDecoration(
+    hintText: "First Name",
+    fillColor: Colors.white,
+    filled: true,
+    border: InputBorder.none,
+  ),
+),
+
+SizedBox(height: 10),
+
+TextField(
+  controller: lastNameController,
+  decoration: InputDecoration(
+    hintText: "Last Name (Optional)",
+    fillColor: Colors.white,
+    filled: true,
+    border: InputBorder.none,
+  ),
+),
+
+SizedBox(height: 10),
             TextSelectionTheme(
               data: TextSelectionThemeData(
                 cursorColor: const Color(0xFF093A61),
                 selectionHandleColor: const Color(0xFF093A61),
               ),
+              
+              
               child: TextField(
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
