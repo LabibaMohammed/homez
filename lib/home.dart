@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:homez/category_services_page.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
 
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -179,15 +185,34 @@ class Home extends StatelessWidget {
   }
 
   Widget categoryItem(String image, String label) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 12),
-      child: Column(
-        children: [
-          Image.asset(image, height: 50, width: 50),
-          SizedBox(height: 8),
-          Text(label, style: TextStyle(color: const Color(0xFF093A61))),
-        ],
+    return GestureDetector(
+      child: Padding(
+        padding: const EdgeInsets.only(right: 12),
+        child: Column(
+          children: [
+            Container(
+              height: 50,
+              width: 50,
+              child: Image.asset(
+                image,
+                height: 50,
+                width: 50,
+                fit: BoxFit.cover,
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(label, style: TextStyle(color: const Color(0xFF093A61))),
+          ],
+        ),
       ),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CategoryServicesPage(categoryName: label),
+          ),
+        );
+      },
     );
   }
 
@@ -205,16 +230,25 @@ class Home extends StatelessWidget {
         height: 150,
         width: 400,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              height: 150,
-              width: 150,
-              padding: EdgeInsetsGeometry.all(5),
+              height: 140,
+              width: 140,
+              padding: EdgeInsets.all(5),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
+                color: Colors.white,
               ),
-              child: Image.asset(imagePath),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  imagePath,
+                  height: 140,
+                  width: 140,
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
