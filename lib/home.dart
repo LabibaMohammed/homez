@@ -2,13 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:homez/category_services_page.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+
+  final String firstName;
+  final String lastName;
+  final String email;
+
+  const Home({super.key, required this.firstName, required this.lastName, required this.email});
 
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
+  late String firstName;
+  late String lastName;
+  late String email;
+
+  @override
+  void initState() {
+    super.initState();
+    firstName = widget.firstName;
+    lastName = widget.lastName;
+    email = widget.email;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +51,7 @@ class _HomeState extends State<Home> {
                     children: [
                       Image.asset('images1/avatar1.png', height: 50, width: 50),
                       Text(
-                        'Hi Dawad',
+                        'Hi $firstName $lastName',
                         style: TextStyle(
                           color: const Color(0xFFFFB545),
                           fontSize: 15,
