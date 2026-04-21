@@ -39,7 +39,7 @@ dependencies:
   firebase_core: 
   cloud_firestore: 
   firebase_auth: 
-  convex_bottom_bar: 
+  convex_bottom_bar: ^3.2.0 
   excel: 
   path_provider:
 
