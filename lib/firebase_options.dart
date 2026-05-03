@@ -46,6 +46,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '868265816686',
     projectId: 'homez-3ff90',
     storageBucket: 'homez-3ff90.firebasestorage.app',
+    iosClientId: '868265816686-iid61ihlogd3j9gpu9o3s0jtrllsoug8.apps.googleusercontent.com',
     iosBundleId: 'com.example.homez',
   );
 
@@ -55,6 +56,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '868265816686',
     projectId: 'homez-3ff90',
     storageBucket: 'homez-3ff90.firebasestorage.app',
+    iosClientId: '868265816686-iid61ihlogd3j9gpu9o3s0jtrllsoug8.apps.googleusercontent.com',
     iosBundleId: 'com.example.homez',
   );
 

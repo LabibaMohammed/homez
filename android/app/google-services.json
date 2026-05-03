@@ -12,7 +12,12 @@
           "package_name": "com.example.homez"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "868265816686-d62g0r404k9dihihgph008dj1ps0p7qj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBoB10R2Rove4YvHBkCFXBYdKdgjz0indA"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "868265816686-d62g0r404k9dihihgph008dj1ps0p7qj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "868265816686-iid61ihlogd3j9gpu9o3s0jtrllsoug8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.homez"
+              }
+            }
+          ]
         }
       }
     }

@@ -1,9 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:homez/home.dart';
 import 'package:provider/provider.dart';
 import 'theme_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:homez/Login.dart';
+import 'package:homez/web/log_page.dart';
 
 
 
@@ -31,7 +34,7 @@ class MyApp extends StatelessWidget {
        theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
       themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      home: const Login(),
+      home: kIsWeb? Log_page(): Login(),//تم تعديل هذا السطر من قبل سمية
     );
   }
 }

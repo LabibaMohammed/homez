@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:homez/category_services_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+
 
 class Home extends StatefulWidget {
 
@@ -163,37 +166,72 @@ class _HomeState extends State<Home> {
               ),
             ),
             SizedBox(height: 10),
-            recommendedCard(
-              'John',
-              'Cleaning Specialist',
-              25,
-              'images1/photo_5_2025-11-21_20-28-53-removebg-preview.png',
-            ),
-            recommendedCard(
-              'Robert',
-              'Electrician',
-              35,
-              'images1/photo_7_2025-11-21_20-28-53.jpg',
-            ),
-            recommendedCard(
-              'Michael',
-              'Delivery',
-              20,
-              'images1/photo_1_2025-11-21_20-29-04.jpg',
-            ),
-            recommendedCard(
-              'James',
-              'Fixing Technician',
-              24,
-              'images1/photo_3_2025-11-21_20-29-04.jpg',
-            ),
-            // recommendedCard('Maya', 'Laundry Expert', 'images1/photo_6_2025-11-21_20-28-53-removebg-preview.png'),
-            recommendedCard(
-              'Mark',
-              'Carpentry',
-              30,
-              'images1/photo_9_2025-11-21_20-28-53.jpg',
-            ),
+            // recommendedCard(
+            //   'John',
+            //   'Cleaning Specialist',
+            //   25,
+            //   'images1/photo_5_2025-11-21_20-28-53-removebg-preview.png',
+            // ),
+            // recommendedCard(
+            //   'Robert',
+            //   'Electrician',
+            //   35,
+            //   'images1/photo_7_2025-11-21_20-28-53.jpg',
+            // ),
+            // recommendedCard(
+            //   'Michael',
+            //   'Delivery',
+            //   20,
+            //   'images1/photo_1_2025-11-21_20-29-04.jpg',
+            // ),
+            // recommendedCard(
+            //   'James',
+            //   'Fixing Technician',
+            //   24,
+            //   'images1/photo_3_2025-11-21_20-29-04.jpg',
+            // ),
+            // // recommendedCard('Maya', 'Laundry Expert', 'images1/photo_6_2025-11-21_20-28-53-removebg-preview.png'),
+            // recommendedCard(
+            //   'Mark',
+            //   'Carpentry',
+            //   30,
+            //   'images1/photo_9_2025-11-21_20-28-53.jpg',
+            // ),
+
+            //--------------------------------هنا سمية عدلت باضافة استريم بلدر فقط-------------------------------
+            StreamBuilder(
+  stream: FirebaseFirestore.instance.collection('services').snapshots(),
+  builder: (context, snapshot) {
+    if (!snapshot.hasData) {
+      return Center(child: CircularProgressIndicator());
+    }
+
+    final docs = snapshot.data!.docs;
+
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: docs.length,
+      itemBuilder: (context, index) {
+        var data = docs[index];
+
+        return Card(
+          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: ListTile(
+            leading: Icon(Icons.work),
+            title: Text(data['service'] ?? ""),
+            subtitle: Text("by ${data['name']}"),
+            trailing: Text("${data['price']} /h"),
+          ),
+        );
+      },
+    );
+  },
+)
           ],
         ),
       ),
