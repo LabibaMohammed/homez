@@ -41,11 +41,59 @@ class _IndexpageState extends State<Indexpage> {
             _bottomNavbar = index;
           });
         },
-        items: const [
-          TabItem(icon: Icons.home, title: 'Home'),
-          TabItem(icon: Icons.search, title: 'Search'),
-          TabItem(icon: Icons.request_page, title: 'Request'),
-          TabItem(icon: Icons.account_box, title: 'Account'),
+        items: [
+          TabItem(
+            icon: Container(
+              width: 44,
+              height: 44,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0xFF093A61),
+              ),
+              alignment: Alignment.center,
+              child: Icon(Icons.home, color: Colors.white, size: 20),
+            ),
+            title: 'Home',
+          ),
+          TabItem(
+            icon: Container(
+              width: 44,
+              height: 44,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0xFF093A61),
+              ),
+              alignment: Alignment.center,
+              child: Icon(Icons.search, color: Colors.white, size: 20),
+            ),
+            title: 'Search',
+          ),
+          TabItem(
+            icon: Container(
+              width: 44,
+              height: 44,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0xFF093A61),
+              ),
+              alignment: Alignment.center,
+              child: Icon(Icons.request_page, color: Colors.white, size: 20),
+            ),
+            title: 'Request',
+          ),
+          TabItem(
+            icon: Container(
+              width: 44,
+              height: 44,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0xFF093A61),
+              ),
+              alignment: Alignment.center,
+              child: Icon(Icons.account_box, color: Colors.white, size: 20),
+            ),
+            title: 'Account',
+          ),
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:homez/indexpage.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // إضافة SharedPreferences
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -17,36 +18,67 @@ final TextEditingController lastNameController = TextEditingController();
 
   void handleSignup() async {
     final firstName = firstNameController.text.trim();
-  final lastName = lastNameController.text.trim();
+    final lastName = lastNameController.text.trim();
     final email = emailController.text.trim();
     final password = passwordController.text;
 
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     final passwordRegex = RegExp(r'^(?=.*[a-zA-Z])(?=.*\d).+$');
 
-    if (email.isEmpty || password.isEmpty) {
+    if (email.isEmpty || password.isEmpty || firstName.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please fill in all fields')),
+        SnackBar(content: Text('Please fill in all fields (First Name required)')),
       );
+      return;
     } else if (!emailRegex.hasMatch(email)) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Enter a valid email address')),
       );
+      return;
     } else if (!passwordRegex.hasMatch(password)) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Password must contain letters and numbers')),
       );
-    } else {
-      // حفظ الإيميل فقط
+      return;
+    }
+
+    try {
+      // Firebase Authentication
+      final UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Save login state and email
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', true);
       await prefs.setString('email', email);
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Indexpage(firstName: firstName,
-          lastName: lastName,
-          email: email,)),
+        MaterialPageRoute(
+          builder: (context) => Indexpage(
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+          ),
+        ),
+      );
+    } on FirebaseAuthException catch (e) {
+      String message = 'Signup failed';
+      if (e.code == 'email-already-in-use') {
+        message = 'This email is already in use';
+      } else if (e.code == 'weak-password') {
+        message = 'The password is too weak';
+      } else if (e.code == 'invalid-email') {
+        message = 'Invalid email address';
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred. Please try again.')),
       );
     }
   }
