@@ -1,4 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- صلاحية الإنترنت مطلوبة لخدمات Firebase -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- صلاحية WAKE_LOCK لتحسين استقبال الإشعارات -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- استقبال الإشعارات بعد إعادة تشغيل الجهاز -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <application
         android:label="homez"
         android:name="${applicationName}"
