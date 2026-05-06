@@ -52,6 +52,13 @@ class CategoryServicesPage extends StatelessWidget {
       {'name': 'Rami', 'service': 'Fixing', 'price': 31.0, 'image': 'images1/fixing/photo_12_2026-03-08_22-44-49.jpg'},
       {'name': 'Sami', 'service': 'Fixing', 'price': 32.0, 'image': 'images1/fixing/photo_13_2026-03-08_22-44-49.jpg'},
       {'name': 'Hani', 'service': 'Fixing', 'price': 33.0, 'image': 'images1/fixing/photo_14_2026-03-08_22-44-49.jpg'},
+       //repairing
+      {'name': 'Omar', 'service': 'repairing', 'price': 28.0, 'image': 'images1/repairing/photo_1_2026-03-08_22-44-49.jpg'},
+      {'name': 'Layla', 'service': 'repairing', 'price': 29.0, 'image': 'images1/repairing/photo_2_2026-03-08_22-44-49.jpg'},
+      {'name': 'Huda', 'service': 'repairing', 'price': 30.0, 'image': 'images1/repairing/photo_3_2026-03-08_22-44-49.jpg'},
+      {'name': 'Rami', 'service': 'repairing', 'price': 31.0, 'image': 'images1/repairing/photo_4_2026-03-08_22-44-49.jpg'},
+      {'name': 'Sami', 'service': 'repairing', 'price': 32.0, 'image': 'images1/repairing/photo_5_2026-03-08_22-44-49.jpg'},
+      {'name': 'Hani', 'service': 'repairing', 'price': 33.0, 'image': 'images1/repairing/photo_6_2026-03-08_22-44-49.jpg'},
     ];
 
     // فلترة حسب الكاتيجوري

@@ -222,10 +222,37 @@ class _HomeState extends State<Home> {
             borderRadius: BorderRadius.circular(12),
           ),
           child: ListTile(
-            leading: Icon(Icons.work),
+            leading: Image.network(data['image']), 
             title: Text(data['service'] ?? ""),
             subtitle: Text("by ${data['name']}"),
-            trailing: Text("${data['price']} /h"),
+            trailing: Column(
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: [
+    Text("${data['price']} /h"),
+    SizedBox(height: 5),
+
+    ElevatedButton(
+      onPressed: () {
+        FirebaseFirestore.instance.collection('orders').add({
+          'name': data['name'],
+          'service': data['service'],
+          'price': data['price'],
+          'status': 'pending',
+          'userEmail': email,
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Order sent ✔")),
+        );
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Color(0xFFFFB545),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      ),
+      child: Text("Request"),
+    ),
+  ],
+),
           ),
         );
       },

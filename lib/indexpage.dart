@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:homez/account.dart';
 import 'package:homez/home.dart';
+import 'package:homez/order_status.dart';
 import 'package:homez/request.dart';
 import 'package:homez/search.dart';
 
@@ -23,7 +24,8 @@ class _IndexpageState extends State<Indexpage> {
     Home(firstName: '', lastName: '', email: ''),
     Search(),
     Request(),
-    Account(name: "name", email: " "),
+   // Account(name: "name", email: " "),
+    OrderStatus(userEmail: "userEmail")
   ];
 
   @override

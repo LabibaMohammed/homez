@@ -55,6 +55,7 @@ class _ServicesPageState extends State<ServicesPage> {
           double price = row.length > 2 && row[2] != null
               ? double.tryParse(row[2]!.value.toString()) ?? 0
               : 0;
+              String image = row.length > 3 ? row[3]!.value.toString() : ""; 
 
           if (name.isEmpty) continue;
 
@@ -62,6 +63,7 @@ class _ServicesPageState extends State<ServicesPage> {
             "name": name,
             "service": service,
             "price": price,
+            "image": image,
           });
         }
       }
