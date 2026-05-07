@@ -43,6 +43,7 @@ dependencies:
   excel: 
   path_provider:
   file_picker: 
+  google_sign_in: 
 
 dev_dependencies:
   flutter_test:

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:homez/indexpage.dart';
 import 'package:homez/sign_up.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -20,6 +22,11 @@ final TextEditingController lastNameController = TextEditingController();
   void initState() {
     super.initState();
     loadSavedEmail(); // تحميل الإيميل المحفوظ
+    _initializeGoogleSignIn();
+  }
+
+  Future<void> _initializeGoogleSignIn() async {
+    await GoogleSignIn.instance.initialize();
   }
 
   // تحميل البيانات المحفوظة
@@ -29,6 +36,55 @@ final TextEditingController lastNameController = TextEditingController();
 
     if (savedEmail != null) {
       emailController.text = savedEmail;
+    }
+  }
+
+  Future<void> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount googleUser =
+          await GoogleSignIn.instance.authenticate();
+
+      final GoogleSignInAuthentication googleAuth =
+          googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+      );
+
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      final user = userCredential.user;
+      if (user != null) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isLoggedIn', true);
+        await prefs.setString('email', user.email ?? "");
+        final displayName = user.displayName ?? "";
+        final displayParts = displayName.split(' ');
+        final firstName = displayParts.isNotEmpty ? displayParts.first : "";
+        final lastName = displayParts.length > 1
+            ? displayParts.sublist(1).join(' ')
+            : "";
+        await prefs.setString('firstName', firstName);
+        await prefs.setString('lastName', lastName);
+
+        if (!mounted) return;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Indexpage(
+              firstName: firstName,
+              lastName: lastName,
+              email: user.email ?? "",
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Google Sign-In Failed")),
+      );
     }
   }
 
@@ -42,18 +98,22 @@ final TextEditingController lastNameController = TextEditingController();
   final passwordRegex = RegExp(r'^(?=.*[a-zA-Z])(?=.*\d).+$');
 
   if (firstName.isEmpty) {
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Please enter your first name')),
     );
   } else if (email.isEmpty || password.isEmpty) {
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Please enter both email and password')),
     );
   } else if (!emailRegex.hasMatch(email)) {
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Please enter a valid email address')),
     );
   } else if (!passwordRegex.hasMatch(password)) {
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Password must contain letters and numbers')),
     );
@@ -65,6 +125,7 @@ final TextEditingController lastNameController = TextEditingController();
     await prefs.setString('firstName', firstName);
     await prefs.setString('lastName', lastName);
 
+    if (!mounted) return;
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -169,7 +230,27 @@ SizedBox(height: 10),
                     ),
                   ),
                 ),
-                SizedBox(height: 5),
+                SizedBox(height: 15),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  ),
+                  onPressed: signInWithGoogle,
+                  icon: Icon(
+                    Icons.g_mobiledata,
+                    color: Colors.red,
+                    size: 35,
+                  ),
+                  label: Text(
+                    "Sign in with Google",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFFB545),
