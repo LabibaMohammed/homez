@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:homez/category_services_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:homez/request.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 
@@ -20,13 +22,14 @@ class _HomeState extends State<Home> {
   late String firstName;
   late String lastName;
   late String email;
+  List<Map<String, dynamic>> requestCart = [];
 
   @override
   void initState() {
     super.initState();
     firstName = widget.firstName;
     lastName = widget.lastName;
-    email = widget.email;
+     email = widget.email;
   }
   @override
   Widget build(BuildContext context) {
@@ -232,24 +235,27 @@ class _HomeState extends State<Home> {
     SizedBox(height: 5),
 
     ElevatedButton(
+      
       onPressed: () {
-        FirebaseFirestore.instance.collection('orders').add({
-          'name': data['name'],
-          'service': data['service'],
-          'price': data['price'],
-          'status': 'pending',
-          'userEmail': email,
-        });
+  setState(() {
+    requestCart.add({
+      'name': data['name'],
+      'service': data['service'],
+      'price': data['price'],
+    });
+  });
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Order sent ✔")),
-        );
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFFFFB545),
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      ),
-      child: Text("Request"),
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text("Added to Request 🛒")),
+  );
+
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => Request(cartItems: requestCart,email: FirebaseAuth.instance.currentUser?.email ?? ""),
+    ),
+  );
+}, child: Text("Request"),
     ),
   ],
 ),

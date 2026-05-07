@@ -1,98 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class OrderStatus extends StatelessWidget {
-  final String userEmail;
-
-  const OrderStatus({super.key, required this.userEmail});
+  const OrderStatus({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("My Orders"),
-        backgroundColor: const Color(0xFF093A61),
-      ),
 
-      body: StreamBuilder<QuerySnapshot>(
+    final user = FirebaseAuth.instance.currentUser;
+
+    return Scaffold(
+      appBar: AppBar(title: Text("My Orders")),
+      body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('orders')
-            .where('userEmail', isEqualTo: userEmail)
-            .orderBy('service') // ترتيب بسيط (اختياري)
+            .where('userEmail', isEqualTo: user?.email)
             .snapshots(),
         builder: (context, snapshot) {
 
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
           }
 
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return const Center(child: Text("No orders yet"));
-          }
+          final docs = snapshot.data!.docs;
 
-          final orders = snapshot.data!.docs;
+          if (docs.isEmpty) {
+            return Center(child: Text("No orders yet"));
+          }
 
           return ListView.builder(
-            itemCount: orders.length,
+            itemCount: docs.length,
             itemBuilder: (context, index) {
-              var data = orders[index];
 
-              String service = data['service'] ?? "";
-              String name = data['name'] ?? "";
-              String status = data['status'] ?? "pending";
-              double price = (data['price'] is int)
-                  ? (data['price'] as int).toDouble()
-                  : data['price'] ?? 0;
-
-              // 🎨 تحديد لون الحالة
-              Color statusColor;
-              String statusText;
-
-              if (status == "accepted") {
-                statusColor = Colors.green;
-                statusText = "Accepted";
-              } else if (status == "rejected") {
-                statusColor = Colors.red;
-                statusText = "Rejected";
-              } else {
-                statusColor = Colors.orange;
-                statusText = "Pending";
-              }
+              var data = docs[index];
 
               return Card(
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-
+                margin: EdgeInsets.all(10),
                 child: ListTile(
-                  contentPadding: const EdgeInsets.all(12),
+                  title: Text(data['service']),
+                  subtitle: Text("Status: ${data['status']}"),
 
-                  title: Text(
-                    service,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-
-                  subtitle: Text("by $name\n$price \$"),
-
-                  trailing: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: statusColor.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      statusText,
-                      style: TextStyle(
-                        color: statusColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                  trailing: Icon(
+                    data['status'] == 'accepted'
+                        ? Icons.check_circle
+                        : data['status'] == 'rejected'
+                            ? Icons.cancel
+                            : Icons.hourglass_bottom,
+                    color: data['status'] == 'accepted'
+                        ? Colors.green
+                        : data['status'] == 'rejected'
+                            ? Colors.red
+                            : Colors.orange,
                   ),
                 ),
               );
