@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "868265816686-s9mfjifa5to8qdnmjl719nnfaflmma31.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.homez",
+            "certificate_hash": "3cbbcc06aa59c853a5feb9e0444031b937c48146"
+          }
+        },
+        {
           "client_id": "868265816686-d62g0r404k9dihihgph008dj1ps0p7qj.apps.googleusercontent.com",
           "client_type": 3
         }
